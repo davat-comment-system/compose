@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  core:
+    container_name: comment-system-core
+    build:
+      context: ../core/
+      dockerfile: Dockerfile
+
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URI=mongodb://db:27017/comment-system
+
+
+    restart: unless-stopped
+
+    networks:
+      - comment-net
+
+    ports:
+      - "5000:5000"
+
+    env_file:
+      - .env
+
+    depends_on:
+      - db
+
+
+  db:
+    container_name: comment-system-db
+    image: mongo:6.0
+
+    restart: unless-stopped
+
+    networks:
+      - comment-net
+
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+
+  app:
+    container_name: comment-system-app
+    build:
+      context: ../app/
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_CORE_BASE_URL=${CORE_ADDRESS}
+
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_CORE_BASE_URL=${CORE_ADDRESS}
+
+
+    ports:
+      - "3000:3000"
+
+    depends_on:
+      - core
+
+    restart: unless-stopped
+
+    networks:
+      - comment-net
+
+volumes:
+  mongo-data:
+
+
+networks:
+  comment-net:
+    name: comment-net
