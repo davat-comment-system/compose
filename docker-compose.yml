@@ -48,11 +48,11 @@ services:
       context: ../app/
       dockerfile: Dockerfile
       args:
-        - NEXT_PUBLIC_CORE_BASE_URL=${CORE_ADDRESS}
+        - NEXT_PUBLIC_CORE_BASE_URL=${CORE_ADDRESS}/api
 
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_CORE_BASE_URL=${CORE_ADDRESS}
+      - NEXT_PUBLIC_CORE_BASE_URL=${CORE_ADDRESS}/api
 
 
     ports:
