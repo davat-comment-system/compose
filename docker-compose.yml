@@ -9,6 +9,7 @@ services:
 
     environment:
       - NODE_ENV=production
+      - PORT=5000
       - DATABASE_URI=mongodb://db:27017/comment-system
 
 
